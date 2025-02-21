@@ -2,67 +2,10 @@ package ExternalReports;
 
 import static org.testng.Assert.assertEquals;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.edge.EdgeOptions;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Optional;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-
-public class ExternalReportsDemo {
-    ExtentReports extent;
-    WebDriver driver = null;
-    ExtentTest test;
-
-    // Set up the Extent Reports
-    @BeforeTest
-    public void config() {
-        String path = System.getProperty("user.dir") + "\\reports\\index.html";
-        ExtentSparkReporter reporter = new ExtentSparkReporter(path);
-        reporter.config().setReportName("Web Automation Results");
-        reporter.config().setDocumentTitle("Test Results");
-
-        extent = new ExtentReports();
-        extent.attachReporter(reporter);
-        extent.setSystemInfo("Tester", "Mukesh");
-    }
-
-    // This setup method runs before each test and initializes the WebDriver for the browser specified
-    @BeforeClass
-    @Parameters("browser") // Parameter for browser selection
-    public void setUp(@Optional("edge") String browser) {
-        if (browser.equalsIgnoreCase("chrome")) {
-            ChromeOptions options = new ChromeOptions();
-            // options.addArguments("--headless"); 
-            driver = new ChromeDriver(options);
-        } else if (browser.equalsIgnoreCase("firefox")) {
-            FirefoxOptions options = new FirefoxOptions();
-           //  options.addArguments("--headless"); 
-            driver = new FirefoxDriver(options);
-        } else if (browser.equalsIgnoreCase("edge")) {
-            EdgeOptions options = new EdgeOptions();
-         // options.addArguments("--headless");
-            driver = new EdgeDriver(options);
-        }
-
-        driver.manage().window().maximize();
-        driver.get("https://rahulshettyacademy.com/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-    }
+public class ExternalReportsDemo extends BaseTest {
 
     @Test(priority = 1)
     public void initialDemo() {
@@ -83,10 +26,7 @@ public class ExternalReportsDemo {
         test = extent.createTest("Third Test");
         driver.findElement(By.xpath("//span[@class='fa fa-linkedin']")).click();
         Thread.sleep(2000);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        
         driver.navigate().back();
-        Thread.sleep(2000);
     }
 
     @Test(priority = 4)
@@ -106,14 +46,5 @@ public class ExternalReportsDemo {
         } catch (Exception e) {
             test.fail("Test Failed due to Exception: " + e.getMessage());
         }
-    }
-
-    // Tear down the WebDriver after each test
-    @AfterClass
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-        extent.flush();
     }
 }
