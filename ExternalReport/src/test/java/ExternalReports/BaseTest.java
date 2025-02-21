@@ -21,9 +21,9 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 
 public class BaseTest {
-    public static WebDriver driver = null;
-    public static ExtentReports extent;
-    public static ExtentTest test;
+    public  WebDriver driver = null;
+    public  ExtentReports extent;
+    public  ExtentTest test;
 
     // Set up the Extent Reports (BeforeTest)
     @BeforeTest
