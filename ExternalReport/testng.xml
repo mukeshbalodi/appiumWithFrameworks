@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="TestSuite" parallel="tests" thread-count="1">
+    
+    <!-- Test configuration for Chrome -->
+    <test name="ChromeTest">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="ExternalReports.ExternalReportsDemo"/>
+        </classes>
+    </test>
+    
+    <!-- Test configuration for Firefox -->
+    <test name="FirefoxTest">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="ExternalReports.ExternalReportsDemo"/>
+        </classes>
+    </test>
+
+    <!-- Test configuration for Edge -->
+    <test name="EdgeTest">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="ExternalReports.ExternalReportsDemo"/>
+        </classes>
+    </test>
+
+</suite>
