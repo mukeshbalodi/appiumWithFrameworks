@@ -13,11 +13,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Optional;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -43,19 +43,19 @@ public class ExternalReportsDemo {
 
     // This setup method runs before each test and initializes the WebDriver for the browser specified
     @BeforeClass
-    @org.testng.annotations.Parameters("browser")
-    public void setUp(String browser) {
+    @Parameters("browser") // Parameter for browser selection
+    public void setUp(@Optional("edge") String browser) {
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
+            // options.addArguments("--headless"); 
             driver = new ChromeDriver(options);
         } else if (browser.equalsIgnoreCase("firefox")) {
             FirefoxOptions options = new FirefoxOptions();
-            options.setHeadless(true);
+           //  options.addArguments("--headless"); 
             driver = new FirefoxDriver(options);
         } else if (browser.equalsIgnoreCase("edge")) {
             EdgeOptions options = new EdgeOptions();
-            options.setHeadless(true);
+         // options.addArguments("--headless");
             driver = new EdgeDriver(options);
         }
 
