@@ -7,8 +7,14 @@ import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -22,6 +28,7 @@ public class ExternalReportsDemo {
     WebDriver driver = null;
     ExtentTest test;
 
+    // Set up the Extent Reports
     @BeforeTest
     public void config() {
         String path = System.getProperty("user.dir") + "\\reports\\index.html";
@@ -34,15 +41,24 @@ public class ExternalReportsDemo {
         extent.setSystemInfo("Tester", "Mukesh");
     }
 
-    @BeforeMethod
-    public void setUp() {
-        // Configure ChromeOptions for headless mode
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Enables headless mode
-        options.addArguments("--disable-gpu"); // Prevents GPU issues
-        options.addArguments("--window-size=1920,1080"); // Sets resolution for headless mode
+    // This setup method runs before each test and initializes the WebDriver for the browser specified
+    @BeforeClass
+    @org.testng.annotations.Parameters("browser")
+    public void setUp(String browser) {
+        if (browser.equalsIgnoreCase("chrome")) {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            driver = new ChromeDriver(options);
+        } else if (browser.equalsIgnoreCase("firefox")) {
+            FirefoxOptions options = new FirefoxOptions();
+            options.setHeadless(true);
+            driver = new FirefoxDriver(options);
+        } else if (browser.equalsIgnoreCase("edge")) {
+            EdgeOptions options = new EdgeOptions();
+            options.setHeadless(true);
+            driver = new EdgeDriver(options);
+        }
 
-        driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.get("https://rahulshettyacademy.com/");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -67,6 +83,8 @@ public class ExternalReportsDemo {
         test = extent.createTest("Third Test");
         driver.findElement(By.xpath("//span[@class='fa fa-linkedin']")).click();
         Thread.sleep(2000);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        
         driver.navigate().back();
         Thread.sleep(2000);
     }
@@ -90,7 +108,8 @@ public class ExternalReportsDemo {
         }
     }
 
-    @AfterMethod
+    // Tear down the WebDriver after each test
+    @AfterClass
     public void tearDown() {
         if (driver != null) {
             driver.quit();
